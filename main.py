@@ -1,4 +1,6 @@
 import turtle
+
+import pandas
 import pandas as pd
 
 
@@ -37,10 +39,6 @@ def main():
                 break  # Handle NoneType if user cancels the input dialog
 
             answer_state = answer_state.title()
-
-            if answer_state.lower() == "exit":
-                break
-
             if answer_state.lower() in states and answer_state.lower() not in guessed_states:
                 guessed_states.append(answer_state.lower())
                 state_data = get_state_data(answer_state, states_data)
@@ -48,7 +46,7 @@ def main():
     except turtle.Terminator:
         print("Game closed.")
     finally:
-        missing_states = states_data[~states_data.state.str.lower().isin(guessed_states)]
+        missing_states = pandas.DataFrame([state for state in states if state not in guessed_states])
         missing_states.to_csv("missing_states.csv")
         turtle.bye()
 
